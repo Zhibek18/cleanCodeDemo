@@ -1,0 +1,1 @@
+create table if not exists users (id serial primary key not null, posts_amount int4, username varchar(255))

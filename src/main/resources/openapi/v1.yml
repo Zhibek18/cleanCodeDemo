@@ -1,0 +1,297 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: User Service
+  license:
+    name: MIT
+paths:
+  /users:
+    post:
+      summary:  Uploads a new user
+      requestBody:
+        description: Username of user to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: Validation error or request body is an invalid
+        '500':
+          description: Internal server error occurred.
+  /users/{id}:
+    get:
+      summary: Gets user’s data
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of user to get
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '404':
+          description: User doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+    delete:
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of user to delete
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+
+    put:
+      summary: Update user’s data
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of user to update
+      requestBody:
+        description: String username – new username for the user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsernameDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        '400':
+          description: Validation error or request body is an invalid
+        '404':
+          description: User doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+  /users/{id}/post/increment:
+    put:
+      summary: Increments user's posts counts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of user to update
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+  /users/{id}/post/decrement:
+    put:
+      summary: Decrements user's posts counts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of user to update
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: User doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+  /posts:
+    post:
+      summary: Uploads a new post
+      requestBody:
+        description: Data of post from specified user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostDataDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
+        '400':
+          description: Validation error or request body is an invalid
+        '500':
+          description: Internal server error occurred.
+  /posts/{id}:
+    get:
+      summary: Gets post’s data
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of existing post
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
+        '404':
+          description: Post doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+    delete:
+      summary: Delete a post
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of post to delete
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Post doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+
+    put:
+      summary: Update posts’s data
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+          description: Id of post to update
+      requestBody:
+        description: Text and topic of post to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDto'
+        '400':
+          description: Validation error or request body is an invalid
+        '404':
+          description: Post doesn’t exist with given id
+        '500':
+          description: Internal server error occurred.
+
+components:
+  schemas:
+    UsernameDto:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+
+    UserDto:
+      description: Long id – ID of created user
+        String username – username of created user
+        String amount – amount of posts for the user
+      type: object
+      required:
+        - id
+        - username
+        - amountOfPosts
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+        amountOfPosts:
+          type: integer
+    PostDataDto:
+      description: Data of post from specified user
+      type: object
+      required:
+        - authorId
+        - text
+      properties:
+        authorId:
+          type: integer
+          format: int64
+        text:
+          type: string
+
+    PostDto:
+      description: Long id – ID of created post
+        Long authorId – ID of a user who created a post
+        String text – text of the post
+        Date postedAt – date when the post was created
+      type: object
+      required:
+        - id
+        - authorId
+        - text
+        - postedAt
+      properties:
+        id:
+          type: integer
+          format: int64
+        authorId:
+          type: integer
+          format: int64
+        text:
+          type: string
+        postedAt:
+          type: string
+          format: date
+    ContentDto:
+      description: Text of post to be updated
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string

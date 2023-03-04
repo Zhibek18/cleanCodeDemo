@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: classpath:db/changelog/0001/createUserTable.sql
+  - include:
+      file: classpath:db/changelog/0001/insertUsers.sql

@@ -1,0 +1,1 @@
+insert into posts (user_id, text) values ('1', 'text1'), ('2', 'text2'), ('1', 'text3')
